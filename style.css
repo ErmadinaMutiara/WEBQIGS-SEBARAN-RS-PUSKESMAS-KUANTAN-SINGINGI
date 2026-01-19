@@ -166,7 +166,6 @@ body {
 /* ===== MAIN CONTAINER ===== */
 .main-container {
     display: flex;
-    align-items: flex-start;
     min-height: calc(100vh - 80px);
     padding: 1.5rem;
     gap: 1.5rem;
@@ -181,8 +180,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0;
-    max-height: calc(100vh - 120px);
-    min-height: 0;
+    height: calc(100vh - 120px);
 }
 
 .sidebar-left > .info-card,
@@ -198,7 +196,7 @@ body {
     overflow-x: hidden;
     padding-right: 0.5rem;
     flex: 1;
-    max-height: 100%;
+    min-height: 0;
 }
 
 .sidebar-left-scroll::-webkit-scrollbar {
@@ -628,8 +626,6 @@ body {
     overflow: hidden;
     box-shadow: var(--shadow-deep);
     background: white;
-    min-height: 400px;
-    min-width: 0;
 }
 
 #map {
@@ -860,7 +856,7 @@ body {
     gap: 0.6rem;
     overflow: hidden;
     border: 2px solid var(--pink-soft);
-    max-height: calc(100vh - 120px);
+    height: calc(100vh - 120px);
 }
 
 .detail-header {
