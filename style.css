@@ -1185,10 +1185,6 @@ body {
         width: 100%;
         max-width: 100%;
     }
-    
-    .map-area {
-        height: 60vh;
-    }
 }
 
 @media (max-width: 768px) {
