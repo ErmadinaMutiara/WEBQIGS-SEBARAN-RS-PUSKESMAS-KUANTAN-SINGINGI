@@ -1185,6 +1185,12 @@ body {
     .sidebar-left, .sidebar-right {
         width: 100%;
         max-width: 100%;
+        max-height: none;
+    }
+    
+    .map-area {
+        height: 70vh;
+        min-height: 500px;
     }
 }
 
