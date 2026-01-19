@@ -254,6 +254,43 @@ body {
     font-size: 1.3rem;
 }
 
+.info-note {
+    margin-top: 0.9rem;
+    padding: 1rem 1.05rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 214, 231, 0.5);
+    border: 1px solid rgba(255, 140, 198, 0.35);
+    box-shadow: 0 6px 16px rgba(255, 45, 149, 0.08);
+}
+
+.info-note ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.48rem;
+    color: #4b3f62;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0;
+}
+
+.info-note li i {
+    color: var(--pink-deep);
+    margin-right: 8px;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.info-note li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.45;
+    word-break: break-word;
+    hyphens: auto;
+}
+
 .info-header h3 {
     font-size: 1.1rem;
     font-weight: 600;
@@ -868,6 +905,7 @@ body {
     overflow-x: hidden;
     border: 2px solid var(--pink-soft);
 }
+
 
 .detail-header {
     background: linear-gradient(135deg, var(--pink-medium), var(--pink-accent));
