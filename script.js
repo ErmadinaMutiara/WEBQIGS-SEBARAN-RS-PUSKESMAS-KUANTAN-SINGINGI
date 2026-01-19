@@ -75,6 +75,12 @@ function initMap() {
         zoomControl: false,
         attributionControl: true
     });
+    
+    // Tunggu DOM fully rendered sebelum invalidate size
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
+    
     // Hilangkan prefix bawaan "Leaflet" (termasuk ikon bendera)
     if (map.attributionControl && map.attributionControl.setPrefix) {
         map.attributionControl.setPrefix('');
