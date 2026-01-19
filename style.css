@@ -166,6 +166,7 @@ body {
 /* ===== MAIN CONTAINER ===== */
 .main-container {
     display: flex;
+    align-items: flex-start;
     min-height: calc(100vh - 80px);
     padding: 1.5rem;
     gap: 1.5rem;
@@ -176,10 +177,12 @@ body {
 /* ===== SIDEBAR KIRI ===== */
 .sidebar-left {
     width: 240px;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 0;
     max-height: calc(100vh - 120px);
+    min-height: 0;
 }
 
 .sidebar-left > .info-card,
@@ -192,8 +195,10 @@ body {
     flex-direction: column;
     gap: 0.8rem;
     overflow-y: auto;
+    overflow-x: hidden;
     padding-right: 0.5rem;
     flex: 1;
+    max-height: 100%;
 }
 
 .sidebar-left-scroll::-webkit-scrollbar {
@@ -623,6 +628,8 @@ body {
     overflow: hidden;
     box-shadow: var(--shadow-deep);
     background: white;
+    min-height: 400px;
+    min-width: 0;
 }
 
 #map {
@@ -843,6 +850,7 @@ body {
 /* ===== SIDEBAR KANAN ===== */
 .sidebar-right {
     width: 260px;
+    flex-shrink: 0;
     background: white;
     border-radius: var(--radius-lg);
     padding: 0.8rem;
