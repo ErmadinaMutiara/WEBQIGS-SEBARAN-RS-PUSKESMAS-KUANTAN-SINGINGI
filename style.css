@@ -166,6 +166,7 @@ body {
 /* ===== MAIN CONTAINER ===== */
 .main-container {
     display: flex;
+    align-items: stretch;
     min-height: calc(100vh - 80px);
     padding: 1.5rem;
     gap: 1.5rem;
@@ -180,7 +181,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0;
-    height: calc(100vh - 120px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar-left > .info-card,
@@ -619,15 +621,6 @@ body {
 }
 
 /* ===== MAP AREA ===== */
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-}
-
 .map-area {
     flex: 1;
     position: relative;
@@ -635,7 +628,10 @@ main {
     overflow: hidden;
     box-shadow: var(--shadow-deep);
     background: white;
-    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
 }
 
 #map {
@@ -864,9 +860,9 @@ main {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     border: 2px solid var(--pink-soft);
-    height: calc(100vh - 120px);
 }
 
 .detail-header {
