@@ -1181,16 +1181,30 @@ body {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
-    .sidebar-left {
-        width: 200px;
+    .main-container {
+        flex-direction: column;
+        height: auto;
+        max-height: none;
+        overflow: auto;
     }
     
-    .sidebar-right {
-        width: 220px;
+    .sidebar-left {
+        width: 100%;
+        max-height: none;
+        order: 1;
     }
     
     .map-area {
+        width: 100%;
+        height: 60vh;
         min-height: 400px;
+        order: 2;
+    }
+    
+    .sidebar-right {
+        width: 100%;
+        max-height: none;
+        order: 3;
     }
 }
 
