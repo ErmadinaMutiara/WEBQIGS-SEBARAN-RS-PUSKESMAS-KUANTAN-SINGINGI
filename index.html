@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Kesehatan Kuansing | Ermadina Mutiara - 24611012</title>
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/flowers.png">
+    
+    <style>
+        /* VARIABEL WARNA SOFT PINK PASTEL */
+        :root {
+            --pink-soft: #FFD6E7;
+            --pink-medium: #FFB8D9;
+            --pink-dark: #FF8CC6;
+            --pink-accent: #FF6BB5;
+            --pink-deep: #FF2D95;
+            --pastel-lavender: #E6D7FF;
+            --pastel-peach: #FFE4D6;
+            --pastel-mint: #D6FFE4;
+            --white-cream: #FFF9FB;
+            --shadow-pink: 0 4px 20px rgba(255, 182, 193, 0.3);
+            --gradient-pink: linear-gradient(135deg, #FFD6E7 0%, #FFB8D9 100%);
+        }
+        
+        /* Tambahkan style untuk modal */
+        #basemap-modal {
+            display: none;
+        }
+        
+        #basemap-modal.show {
+            display: flex !important;
+        }
+        
+        /* Style untuk tooltip kecamatan */
+        .kecamatan-label {
+            background: transparent;
+            color: #ffffff;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 0.6px;
+            border-radius: 20px;
+            padding: 6px 14px;
+            border: none;
+            box-shadow: 0 3px 8px rgba(255, 107, 181, 0.4);
+            text-shadow: 0 0 4px rgba(255, 182, 193, 1), 0 0 8px rgba(255, 107, 181, 0.9);
+        }
+        
+        /* Popup border */
+        .border-popup {
+            padding: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .border-popup h4 {
+            margin: 0 0 10px 0;
+            color: var(--pink-deep);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR PINK -->
+    <nav class="navbar-pink">
+        <div class="nav-left">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1 class="logo-title">Sebaran Rumah Sakit/Puskesmas</h1>
+                    <p class="subtitle">Kabupaten Kuantan Singingi - Riau</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-right">
+            <div class="creator-badge">
+                <span>Ermadina Mutiara - 24611012</span>
+            </div>
+            <button id="theme-btn" class="theme-btn">
+                <i class="fas fa-palette"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- SIDEBAR KIRI -->
+        <aside class="sidebar-left">
+            <!-- SCROLLABLE SECTION FOR ALL SIDEBAR CARDS -->
+            <div class="sidebar-left-scroll">
+            <!-- INFO CARD -->
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Informasi Peta</h3>
+                </div>
+                <div class="info-content">
+                    <div class="info-row">
+                        <span class="info-label">Wilayah</span>
+                        <span class="info-value">Kab. Kuantan Singingi</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Provinsi</span>
+                        <span class="info-value">Riau</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Fasilitas</span>
+                        <span class="info-value" id="total-facilities">25</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <div class="search-card">
+                <div class="search-header">
+                    <i class="fas fa-search"></i>
+                    <h3>Cari Fasilitas</h3>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Ketik nama fasilitas...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <!-- FILTER SECTION -->
+            <div class="filter-card">
+                <div class="filter-header">
+                    <i class="fas fa-filter"></i>
+                    <h3>Filter Tipe</h3>
+                </div>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" id="filter-hospital" checked>
+                        <span class="filter-icon hospital"><i class="fas fa-hospital"></i></span>
+                        <span class="filter-text">Rumah Sakit</span>
+                        <span class="filter-count" id="count-hospital">1</span>
+                    </label>
+                    
+                    <label class="filter-option">
+                        <input type="checkbox" id="filter-clinic" checked>
+                        <span class="filter-icon clinic"><i class="fas fa-clinic-medical"></i></span>
+                        <span class="filter-text">Puskesmas</span>
+                        <span class="filter-count" id="count-clinic">29</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STATS CARD -->
+            <div class="stats-card">
+                <div class="stats-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Statistik</h3>
+                </div>
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <div class="stat-circle hospital-stat">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-hospital">6</span>
+                            <span class="stat-label">Rumah Sakit</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-circle clinic-stat">
+                            <i class="fas fa-clinic-medical"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-clinic">19</span>
+                            <span class="stat-label">Puskesmas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-circle border-stat">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-total">25</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="legend-card">
+                <div class="legend-header">
+                    <i class="fas fa-key"></i>
+                    <h3>Legenda</h3>
+                </div>
+                <div class="legend-subtitle">Fasilitas Kesehatan</div>
+                <div class="legend-items">
+                    <div class="legend-item facility-legend facility-legend-hospital">
+                        <div class="custom-marker" style="background-color: #FF2D95; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-hospital" style="color: white; font-size: 15px;"></i>
+                        </div>
+                        <span>Rumah Sakit (RSUD)</span>
+                    </div>
+                    <div class="legend-item facility-legend facility-legend-clinic">
+                        <div class="custom-marker" style="background-color: #9B7EBD; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-clinic-medical" style="color: white; font-size: 15px;"></i>
+                        </div>
+                        <span>Puskesmas</span>
+                    </div>
+                </div>
+                <div class="legend-subtitle">Kecamatan</div>
+                <div class="legend-items kecamatan-legend" id="kecamatan-legend"></div>
+            </div>
+            </div>
+        </aside>
+
+        <!-- MAP AREA -->
+        <main class="map-area">
+            <!-- MAP TOOLBAR -->
+            <div class="map-toolbar">
+                <div class="toolbar-group">
+                    <button id="zoom-in" class="tool-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button id="zoom-out" class="tool-btn">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button id="reset-view" class="tool-btn">
+                        <i class="fas fa-home"></i>
+                    </button>
+                </div>
+                
+                <div class="toolbar-group">
+                    <button id="basemap-btn" class="tool-btn" title="Pilih Jenis Peta">
+                        <i class="fas fa-map"></i>
+                        <span>Peta</span>
+                    </button>
+                    <button id="kecamatan-toggle" class="tool-btn" title="Tampilkan/Sembunyikan Peta Kecamatan">
+                        <i class="fas fa-draw-polygon"></i>
+                        <span>Kecamatan</span>
+                    </button>
+                    <button id="kabupaten-toggle" class="tool-btn" title="Tampilkan/Sembunyikan Peta Kabupaten">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Kabupaten</span>
+                    </button>
+                    <button id="facilities-toggle" class="tool-btn" title="Tampilkan/Sembunyikan Fasilitas Kesehatan">
+                        <i class="fas fa-location-dot"></i>
+                        <span>Fasilitas</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAP CONTAINER -->
+            <div id="map"></div>
+
+            <!-- MAP INFO -->
+            <div class="map-info">
+                <div class="info-bubble">
+                    <i class="fas fa-crosshairs"></i>
+                    <span id="coordinates">-0.5000, 101.5000</span>
+                </div>
+                <div class="info-bubble">
+                    <i class="fas fa-ruler"></i>
+                    <span id="scale">1:100,000</span>
+                </div>
+            </div>
+
+            <!-- COMPASS -->
+            <div class="compass-container">
+                <img src="kompas.jpg" alt="Kompas" class="compass-img">
+            </div>
+        </main>
+
+        <!-- SIDEBAR KANAN (DETAIL) -->
+        <aside class="sidebar-right">
+            <div class="detail-header">
+                <h3><i class="fas fa-info-circle"></i> Detail Fasilitas</h3>
+            </div>
+            
+            <div class="detail-content" id="detail-content">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h4>Pilih Lokasi</h4>
+                    <p>Klik pada salah satu marker di peta untuk melihat detail fasilitas kesehatan</p>
+                </div>
+            </div>
+            
+            <div class="detail-actions">
+                <button id="zoom-to-btn" class="action-btn pink-btn" disabled>
+                    <i class="fas fa-search-location"></i> Zoom ke Lokasi
+                </button>
+                <button id="direction-btn" class="action-btn lavender-btn" disabled>
+                    <i class="fas fa-directions"></i> Petunjuk Arah
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ATTRIBUTION BAR -->
+    <div class="attribution">
+        <p> Peta Kesehatan Kuansing | Dibuat oleh Ermadina Mutiara - 24611012 | © 2026</p>
+    </div>
+
+    <!-- MODAL BASEMAP -->
+    <div id="basemap-modal" class="modal-overlay">
+        <div class="modal-pink">
+            <div class="modal-header">
+                <h3><i class="fas fa-map"></i> Pilih Jenis Peta</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="basemap-options">
+                    <div class="basemap-option active" data-basemap="osm">
+                        <div class="basemap-preview" style="background-color: #FFD6E7;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-road"></i> OpenStreetMap</h4>
+                            <p>Peta standar OSM global</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="osmfr">
+                        <div class="basemap-preview" style="background-color: #E6D7FF;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-flag"></i> OSM France</h4>
+                            <p>Tile Prancis dengan gaya OSM FR</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="osmde">
+                        <div class="basemap-preview" style="background-color: #FFE4D6;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-flag-checkered"></i> OSM Germany</h4>
+                            <p>Tile Jerman dengan gaya OSM DE</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="cyclosm">
+                        <div class="basemap-preview" style="background-color: #D6FFE4;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-bicycle"></i> CyclOSM</h4>
+                            <p>Render sepeda berbasis OSM</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="cartodb">
+                        <div class="basemap-preview" style="background-color: #E8F4F8;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-globe"></i> CartoDB Voyager</h4>
+                            <p>Peta navigasi dengan desain modern</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="watercolor">
+                        <div class="basemap-preview" style="background-color: #FFF5E6;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-palette"></i> Stamen Watercolor</h4>
+                            <p>Peta artistik dengan efek cat air</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="terrain">
+                        <div class="basemap-preview" style="background-color: #F0E6D2;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-mountain"></i> Stamen Terrain</h4>
+                            <p>Peta topografi dengan relief medan</p>
+                        </div>
+                    </div>
+
+                    <div class="basemap-option" data-basemap="none">
+                        <div class="basemap-preview" style="background-color: #f6f6f6;"></div>
+                        <div class="basemap-info">
+                            <h4><i class="fas fa-eye-slash"></i> Tanpa Basemap</h4>
+                            <p>Hanya tampilkan batas kecamatan dan titik fasilitas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn confirm-btn">Pilih</button>
+                <button class="modal-btn cancel-btn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOWER DECORATION -->
+    <div class="flower-decoration">
+        <div class="flower-1">🌸</div>
+        <div class="flower-2">🌸</div>
+        <div class="flower-3">🌸</div>
+        <div class="flower-4">🌸</div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
