@@ -1178,19 +1178,16 @@ body {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
-    .main-container {
-        flex-direction: column;
+    .sidebar-left {
+        width: 200px;
     }
     
-    .sidebar-left, .sidebar-right {
-        width: 100%;
-        max-width: 100%;
-        max-height: none;
+    .sidebar-right {
+        width: 220px;
     }
     
     .map-area {
-        height: 70vh;
-        min-height: 500px;
+        min-height: 400px;
     }
 }
 
